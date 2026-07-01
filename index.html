@@ -1,0 +1,1242 @@
+<!DOCTYPE html>
+<html lang="ta">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TensorFlow Masterclass — Tanglish Version | ஏன் எல்லாரும் Use பண்றாங்க?</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --g50:#f0fdf4;--g100:#dcfce7;--g200:#bbf7d0;--g300:#86efac;
+    --g400:#4ade80;--g500:#22c55e;--g600:#16a34a;--g700:#15803d;
+    --g800:#166534;--g900:#14532d;--g950:#052e16;
+    --w:#fff;--gr50:#f9fafb;--gr100:#f3f4f6;--gr200:#e5e7eb;
+    --gr300:#d1d5db;--gr400:#9ca3af;--gr500:#6b7280;
+    --gr600:#4b5563;--gr700:#374151;--gr800:#1f2937;--gr900:#111827;
+    --fn:'Inter',sans-serif;--fm:'JetBrains Mono',monospace;
+    --r:12px;--rs:8px;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  html{scroll-behavior:smooth;}
+  body{font-family:var(--fn);background:var(--w);color:var(--gr900);line-height:1.65;font-size:16px;}
+
+  /* NAV */
+  nav{position:sticky;top:0;z-index:100;background:rgba(255,255,255,0.96);backdrop-filter:blur(8px);
+    border-bottom:1.5px solid var(--g200);padding:0 2rem;
+    display:flex;align-items:center;justify-content:space-between;height:64px;}
+  .nav-logo{display:flex;align-items:center;gap:10px;font-weight:800;font-size:1.1rem;color:var(--g800);}
+  .tf-b{background:var(--g600);color:#fff;font-size:.72rem;font-weight:700;padding:3px 8px;border-radius:6px;letter-spacing:.05em;}
+  .lang-pill{background:var(--g100);color:var(--g800);font-size:.72rem;font-weight:700;padding:3px 10px;border-radius:100px;border:1px solid var(--g300);}
+  .nav-links{display:flex;gap:1.5rem;list-style:none;}
+  .nav-links a{text-decoration:none;color:var(--gr600);font-size:.85rem;font-weight:500;transition:color .2s;}
+  .nav-links a:hover{color:var(--g600);}
+
+  /* HERO */
+  .hero{background:linear-gradient(135deg,var(--g950) 0%,var(--g800) 55%,var(--g600) 100%);
+    color:#fff;padding:5rem 2rem 4rem;text-align:center;position:relative;overflow:hidden;}
+  .hero::before{content:'';position:absolute;inset:0;
+    background:url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%2322c55e' fill-opacity='0.06'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");}
+  .hero-eyebrow{display:inline-flex;align-items:center;gap:8px;
+    background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);
+    color:var(--g200);font-size:.8rem;font-weight:600;
+    padding:6px 18px;border-radius:100px;margin-bottom:1.5rem;letter-spacing:.04em;}
+  .hero h1{font-size:clamp(1.9rem,4.5vw,3.5rem);font-weight:900;line-height:1.1;margin-bottom:1rem;}
+  .hero h1 span{color:var(--g300);}
+  .hero-tamil{font-size:1rem;color:rgba(255,255,255,.65);margin-bottom:.5rem;}
+  .hero-sub{font-size:1.05rem;color:rgba(255,255,255,.72);max-width:620px;margin:0 auto 2.5rem;}
+  .hero-stats{display:flex;justify-content:center;gap:2.5rem;flex-wrap:wrap;margin-bottom:2.5rem;}
+  .hero-stat strong{display:block;font-size:1.9rem;font-weight:800;color:var(--g300);}
+  .hero-stat span{font-size:.8rem;color:rgba(255,255,255,.55);}
+  .hero-btns{display:flex;justify-content:center;gap:1rem;flex-wrap:wrap;}
+  .btn-primary{display:inline-flex;align-items:center;gap:8px;background:var(--g500);color:#fff;
+    font-weight:700;font-size:.95rem;padding:13px 28px;border-radius:var(--r);text-decoration:none;
+    transition:background .2s,transform .2s;border:none;cursor:pointer;}
+  .btn-primary:hover{background:var(--g400);transform:translateY(-1px);}
+  .btn-outline{display:inline-flex;align-items:center;gap:8px;background:transparent;color:#fff;
+    font-weight:600;font-size:.95rem;padding:13px 28px;border-radius:var(--r);text-decoration:none;
+    transition:background .2s;border:1.5px solid rgba(255,255,255,.35);cursor:pointer;}
+  .btn-outline:hover{background:rgba(255,255,255,.08);}
+
+  /* SECTION */
+  .sec{padding:4rem 2rem;}
+  .sec-in{max-width:1100px;margin:0 auto;}
+  .sec-alt{background:var(--g50);}
+  .sec-dark{background:var(--g950);color:#fff;}
+  .sec-tag{display:inline-block;background:var(--g100);color:var(--g800);
+    font-size:.75rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;
+    padding:5px 14px;border-radius:100px;margin-bottom:.75rem;}
+  .sec-dark .sec-tag{background:rgba(34,197,94,.15);color:var(--g300);}
+  .sec-title{font-size:clamp(1.5rem,2.8vw,2.2rem);font-weight:800;margin-bottom:.6rem;line-height:1.2;}
+  .sec-sub{color:var(--gr500);font-size:1rem;max-width:600px;margin-bottom:2.5rem;}
+  .sec-dark .sec-title{color:#fff;}
+  .sec-dark .sec-sub{color:rgba(255,255,255,.5);}
+
+  /* WHY BOX — big attention grabber */
+  .why-hero{background:var(--g900);border-radius:var(--r);padding:2.5rem;margin-bottom:2rem;
+    border:2px solid var(--g700);position:relative;overflow:hidden;}
+  .why-hero::before{content:'🤔';position:absolute;right:2rem;top:1.5rem;font-size:3rem;opacity:.2;}
+  .why-title{font-size:1.4rem;font-weight:800;color:var(--g300);margin-bottom:1rem;}
+  .why-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:1rem;}
+  .why-card{background:rgba(255,255,255,.05);border:1px solid rgba(34,197,94,.25);
+    border-radius:var(--rs);padding:1.25rem;}
+  .why-card-q{font-size:.8rem;font-weight:700;color:var(--g400);text-transform:uppercase;
+    letter-spacing:.05em;margin-bottom:.5rem;}
+  .why-card-a{font-size:.9rem;color:rgba(255,255,255,.8);line-height:1.6;}
+  .why-card-a strong{color:var(--g300);}
+
+  /* ANALOGY CARD */
+  .analogy{background:var(--g800);border-radius:var(--r);padding:1.75rem;margin-bottom:1.5rem;
+    border-left:5px solid var(--g400);}
+  .analogy-label{font-size:.75rem;font-weight:700;color:var(--g400);text-transform:uppercase;
+    letter-spacing:.06em;margin-bottom:.6rem;}
+  .analogy-text{color:rgba(255,255,255,.85);font-size:.95rem;line-height:1.7;}
+  .analogy-text .hi{color:var(--g300);font-weight:600;}
+
+  /* COMPARISON TABLE */
+  .compare-table{width:100%;border-collapse:collapse;border-radius:var(--r);overflow:hidden;
+    border:1.5px solid var(--g200);}
+  .compare-table th{background:var(--g800);color:#fff;padding:12px 16px;font-size:.85rem;
+    font-weight:700;text-align:left;}
+  .compare-table td{padding:11px 16px;font-size:.85rem;border-bottom:1px solid var(--g100);
+    vertical-align:top;}
+  .compare-table tr:last-child td{border-bottom:none;}
+  .compare-table tr:nth-child(even) td{background:var(--g50);}
+  .check{color:var(--g600);font-weight:700;}
+  .cross{color:#ef4444;font-weight:700;}
+
+  /* COVERAGE CHECK */
+  .coverage-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:.75rem;}
+  .cov-item{display:flex;align-items:flex-start;gap:10px;padding:10px 14px;
+    border-radius:var(--rs);border:1px solid;}
+  .cov-yes{background:#f0fdf4;border-color:var(--g300);}
+  .cov-new{background:#fef3c7;border-color:#fcd34d;}
+  .cov-icon{font-size:.9rem;flex-shrink:0;margin-top:1px;}
+  .cov-text{font-size:.83rem;line-height:1.45;color:var(--gr700);}
+  .cov-badge{font-size:.65rem;font-weight:700;padding:2px 7px;border-radius:100px;
+    display:inline-block;margin-top:3px;}
+  .badge-ok{background:var(--g100);color:var(--g700);}
+  .badge-new{background:#fef3c7;color:#92400e;}
+  .badge-added{background:#dbeafe;color:#1e40af;}
+
+  /* PHASE CARDS */
+  .phase{border:1.5px solid var(--g200);border-radius:var(--r);overflow:hidden;margin-bottom:1.25rem;background:#fff;}
+  .phase:hover{box-shadow:0 4px 20px rgba(22,163,74,.1);}
+  .phase-hdr{display:flex;align-items:center;gap:1rem;padding:1.1rem 1.4rem;
+    background:var(--g50);border-bottom:1.5px solid var(--g200);}
+  .ph-num{width:38px;height:38px;border-radius:9px;background:var(--g600);color:#fff;
+    font-weight:800;font-size:1rem;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+  .ph-meta{flex:1;}
+  .ph-title{font-weight:700;font-size:.98rem;color:var(--g900);}
+  .ph-ta{font-size:.8rem;color:var(--g600);font-weight:500;margin-top:2px;}
+  .ph-badge{font-size:.72rem;font-weight:700;padding:4px 12px;border-radius:100px;white-space:nowrap;}
+  .b-beg{background:var(--g100);color:var(--g700);}
+  .b-int{background:#fef3c7;color:#92400e;}
+  .b-adv{background:#fee2e2;color:#991b1b;}
+  .b-pro{background:#ede9fe;color:#4c1d95;}
+  .phase-body{padding:1.4rem;}
+  .topics-g{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:.7rem;margin-bottom:1.2rem;}
+  .t-item{display:flex;align-items:flex-start;gap:9px;padding:9px 11px;
+    background:var(--g50);border:1px solid var(--g200);border-radius:var(--rs);font-size:.83rem;}
+  .t-chk{width:17px;height:17px;border-radius:50%;background:var(--g500);color:#fff;
+    font-size:.65rem;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px;}
+  .t-ta{font-size:.73rem;color:var(--g700);font-weight:500;display:block;margin-top:2px;}
+  .new-badge{font-size:.63rem;background:#dbeafe;color:#1e40af;font-weight:700;padding:1px 6px;
+    border-radius:4px;margin-left:4px;vertical-align:middle;}
+
+  /* CODE */
+  .code-block{background:var(--gr900);color:#e2e8f0;border-radius:var(--rs);padding:1.1rem 1.4rem;
+    font-family:var(--fm);font-size:.8rem;line-height:1.75;overflow-x:auto;
+    border:1px solid var(--gr700);position:relative;}
+  .lang-tag{position:absolute;top:9px;right:11px;font-size:.65rem;color:var(--gr500);letter-spacing:.05em;}
+  .kw{color:#f472b6;}.str{color:#86efac;}.fn{color:#60a5fa;}.cm{color:#64748b;}.num{color:#fbbf24;}
+  .ph-time{display:flex;align-items:center;gap:6px;font-size:.78rem;color:var(--gr500);
+    margin-top:1rem;padding-top:1rem;border-top:1px solid var(--gr100);}
+
+  /* WHY REASONS */
+  .reasons-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:1.25rem;}
+  .reason-card{border:1.5px solid var(--g200);border-radius:var(--r);padding:1.5rem;background:#fff;}
+  .reason-num{width:36px;height:36px;border-radius:9px;background:var(--g600);color:#fff;
+    font-weight:800;font-size:1rem;display:flex;align-items:center;justify-content:center;margin-bottom:1rem;}
+  .reason-title{font-weight:700;font-size:1rem;color:var(--g900);margin-bottom:.35rem;}
+  .reason-ta{font-size:.78rem;color:var(--g600);font-weight:500;margin-bottom:.6rem;}
+  .reason-desc{font-size:.85rem;color:var(--gr600);line-height:1.6;}
+  .reason-desc strong{color:var(--g800);}
+
+  /* COMPANIES */
+  .companies{display:flex;flex-wrap:wrap;gap:.75rem;margin-top:1.5rem;}
+  .co-tag{background:var(--g50);border:1.5px solid var(--g200);border-radius:var(--rs);
+    padding:8px 18px;font-size:.85rem;font-weight:600;color:var(--g800);}
+
+  /* CHEATSHEET */
+  .cheat-g{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:1.1rem;}
+  .cheat-blk{background:var(--gr900);border-radius:var(--r);overflow:hidden;border:1px solid var(--gr700);}
+  .cheat-hdr{padding:9px 15px;background:var(--g900);font-size:.75rem;font-weight:700;
+    color:var(--g300);text-transform:uppercase;letter-spacing:.06em;border-bottom:1px solid var(--g800);}
+  .cheat-code{padding:.9rem 1.2rem;font-family:var(--fm);font-size:.78rem;color:#e2e8f0;
+    line-height:1.8;overflow-x:auto;}
+
+  /* CERT */
+  .cert-g{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:1.1rem;}
+  .cert-card{border:1.5px solid var(--g200);border-radius:var(--r);padding:1.4rem;background:#fff;
+    display:flex;gap:1rem;transition:box-shadow .2s;}
+  .cert-card:hover{box-shadow:0 4px 18px rgba(22,163,74,.12);}
+  .cert-ico{width:48px;height:48px;border-radius:9px;display:flex;align-items:center;
+    justify-content:center;font-size:1.4rem;flex-shrink:0;}
+  .cert-name{font-weight:700;font-size:.9rem;color:var(--gr900);margin-bottom:2px;}
+  .cert-prov{font-size:.77rem;color:var(--gr500);margin-bottom:6px;}
+  .cert-free{display:inline-block;background:var(--g100);color:var(--g800);font-size:.68rem;
+    font-weight:700;text-transform:uppercase;letter-spacing:.05em;padding:2px 9px;border-radius:100px;margin-bottom:6px;}
+  .cert-paid{display:inline-block;background:#fef3c7;color:#92400e;font-size:.68rem;
+    font-weight:700;text-transform:uppercase;letter-spacing:.05em;padding:2px 9px;border-radius:100px;margin-bottom:6px;}
+  .cert-desc{font-size:.8rem;color:var(--gr600);line-height:1.5;}
+  .cert-link{display:inline-flex;align-items:center;gap:4px;margin-top:9px;font-size:.77rem;
+    font-weight:600;color:var(--g700);text-decoration:none;transition:color .2s;}
+  .cert-link:hover{color:var(--g500);}
+
+  /* PROJECTS */
+  .proj-g{display:grid;grid-template-columns:repeat(auto-fit,minmax(270px,1fr));gap:1.1rem;}
+  .proj-card{border:1.5px solid var(--g200);border-radius:var(--r);overflow:hidden;background:#fff;}
+  .proj-hdr{padding:.9rem 1.1rem;background:var(--g900);color:#fff;display:flex;align-items:center;gap:9px;}
+  .proj-icon{font-size:1.3rem;}
+  .proj-title{font-weight:700;font-size:.9rem;flex:1;}
+  .proj-ta{font-size:.72rem;color:var(--g300);display:block;margin-top:1px;}
+  .diff{font-size:.65rem;font-weight:600;padding:3px 9px;border-radius:100px;text-transform:uppercase;}
+  .d-e{background:var(--g500);color:#fff;}
+  .d-m{background:#f59e0b;color:#fff;}
+  .d-h{background:#ef4444;color:#fff;}
+  .proj-body{padding:1.1rem;}
+  .proj-desc{font-size:.83rem;color:var(--gr600);margin-bottom:.9rem;line-height:1.5;}
+  .proj-ta-desc{font-size:.75rem;color:var(--g700);margin-bottom:.75rem;font-style:italic;}
+  .proj-skills{display:flex;flex-wrap:wrap;gap:5px;}
+  .sk{font-size:.68rem;font-weight:600;padding:3px 9px;border-radius:100px;
+    background:var(--g100);color:var(--g800);border:1px solid var(--g200);}
+
+  /* TOOLS */
+  .tools-g{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:.9rem;}
+  .tool-c{padding:1.1rem;border:1.5px solid var(--g200);border-radius:var(--r);background:#fff;}
+  .tool-n{font-weight:700;font-size:.9rem;color:var(--g900);margin-bottom:3px;}
+  .tool-t{font-size:.7rem;color:var(--gr500);text-transform:uppercase;letter-spacing:.05em;margin-bottom:7px;}
+  .tool-d{font-size:.8rem;color:var(--gr600);}
+
+  /* TIMELINE */
+  .tl{position:relative;padding-left:2.2rem;}
+  .tl::before{content:'';position:absolute;left:10px;top:0;bottom:0;width:2px;background:var(--g700);}
+  .tl-item{position:relative;margin-bottom:1.75rem;}
+  .tl-dot{position:absolute;left:-1.9rem;top:4px;width:13px;height:13px;border-radius:50%;
+    background:var(--g500);border:3px solid var(--g950);box-shadow:0 0 0 2px var(--g400);}
+  .tl-w{font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;
+    color:var(--g400);margin-bottom:3px;}
+  .tl-t{font-weight:700;font-size:.95rem;color:#fff;margin-bottom:3px;}
+  .tl-d{font-size:.83rem;color:rgba(255,255,255,.55);}
+
+  /* CAREER */
+  .career-g{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:1.1rem;}
+  .career-c{border:1.5px solid var(--g200);border-radius:var(--r);padding:1.4rem;background:#fff;}
+  .career-ico{font-size:1.8rem;margin-bottom:.75rem;}
+  .career-t{font-weight:800;font-size:1rem;color:var(--g900);margin-bottom:3px;}
+  .career-ta{font-size:.75rem;color:var(--g600);font-weight:500;margin-bottom:.5rem;}
+  .career-desc{font-size:.82rem;color:var(--gr600);margin-bottom:.75rem;}
+  .career-sal{font-size:.82rem;font-weight:700;color:var(--g700);background:var(--g50);
+    padding:6px 12px;border-radius:var(--rs);display:inline-block;}
+
+  /* FOOTER */
+  footer{background:var(--g950);color:rgba(255,255,255,.55);text-align:center;padding:2.5rem 2rem;font-size:.85rem;}
+  footer strong{color:var(--g400);}
+
+  /* NOTICE BOX */
+  .notice{background:var(--g100);border:1.5px solid var(--g300);border-radius:var(--r);
+    padding:1.25rem 1.5rem;margin-bottom:2rem;}
+  .notice-title{font-weight:800;font-size:.95rem;color:var(--g800);margin-bottom:.4rem;}
+  .notice-text{font-size:.88rem;color:var(--g700);line-height:1.6;}
+
+  /* HAMBURGER */
+  .ham-btn{display:none;flex-direction:column;gap:5px;background:none;border:none;
+    cursor:pointer;padding:6px;border-radius:6px;}
+  .ham-btn span{display:block;width:22px;height:2px;background:var(--g800);
+    border-radius:2px;transition:all .25s;}
+  .ham-btn.open span:nth-child(1){transform:translateY(7px) rotate(45deg);}
+  .ham-btn.open span:nth-child(2){opacity:0;}
+  .ham-btn.open span:nth-child(3){transform:translateY(-7px) rotate(-45deg);}
+  .mobile-menu{display:none;position:fixed;top:56px;left:0;right:0;z-index:99;
+    background:#fff;border-bottom:1.5px solid var(--g200);
+    padding:.5rem 0;box-shadow:0 4px 16px rgba(0,0,0,.08);}
+  .mobile-menu a{display:block;padding:13px 1.5rem;font-size:.95rem;font-weight:500;
+    color:var(--gr700);text-decoration:none;border-bottom:1px solid var(--g100);
+    transition:background .15s;}
+  .mobile-menu a:last-child{border-bottom:none;}
+  .mobile-menu a:hover{background:var(--g50);color:var(--g700);}
+  .mobile-menu.open{display:block;}
+
+  /* ============================================================
+     RESPONSIVE — Tablet (≤900px)
+  ============================================================ */
+  @media(max-width:900px){
+    .nav-links{display:none;}
+    .ham-btn{display:flex;}
+    nav{padding:0 1.25rem;}
+    .nav-logo{font-size:1rem;}
+
+    .hero{padding:4rem 1.5rem 3rem;}
+    .hero-stats{gap:1.75rem;}
+
+    .sec{padding:3.25rem 1.5rem;}
+
+    .why-grid{grid-template-columns:1fr 1fr;}
+    .cert-g{grid-template-columns:1fr 1fr;}
+    .proj-g{grid-template-columns:1fr 1fr;}
+    .career-g{grid-template-columns:1fr 1fr;}
+    .tools-g{grid-template-columns:repeat(auto-fit,minmax(180px,1fr));}
+    .cheat-g{grid-template-columns:1fr 1fr;}
+
+    .compare-table{font-size:.8rem;}
+    .compare-table th,.compare-table td{padding:9px 10px;}
+
+    .coverage-grid{grid-template-columns:1fr 1fr;}
+
+    .phase-hdr,.ph-hdr{flex-wrap:wrap;gap:.5rem;}
+    .ph-badge{margin-left:auto;}
+    .topics-g{grid-template-columns:1fr 1fr;}
+  }
+
+  /* ============================================================
+     RESPONSIVE — Mobile (≤600px)
+  ============================================================ */
+  @media(max-width:600px){
+    /* NAV */
+    nav{padding:0 1rem;height:56px;}
+    .nav-logo{font-size:.9rem;gap:7px;}
+    .lang-pill{display:none;}
+    .tf-b{font-size:.65rem;padding:2px 6px;}
+
+    /* HERO */
+    .hero{padding:2.75rem 1rem 2.25rem;}
+    .hero-eyebrow{font-size:.72rem;padding:5px 13px;}
+    .hero h1{font-size:1.7rem;line-height:1.15;}
+    .hero-tamil{font-size:.85rem;}
+    .hero-sub{font-size:.9rem;margin-bottom:1.75rem;}
+    .hero-stats{gap:1.25rem;}
+    .hero-stat strong{font-size:1.5rem;}
+    .hero-stat span{font-size:.72rem;}
+    .hero-btns{flex-direction:column;align-items:stretch;gap:.75rem;width:100%;max-width:320px;margin:0 auto;}
+    .btn-primary,.btn-outline{justify-content:center;padding:13px 20px;font-size:.88rem;}
+
+    /* SECTIONS */
+    .sec{padding:2.5rem 1rem;}
+    .sec-title{font-size:1.35rem;}
+    .sec-sub{font-size:.88rem;margin-bottom:1.75rem;}
+    .sec-tag{font-size:.7rem;}
+
+    /* WHY HERO */
+    .why-hero{padding:1.5rem 1.1rem;}
+    .why-hero::before{display:none;}
+    .why-title{font-size:1.1rem;}
+    .why-grid{grid-template-columns:1fr;}
+    .why-card{padding:1rem;}
+    .why-card-a{font-size:.85rem;}
+
+    /* ANALOGY */
+    .analogy{padding:1.25rem 1rem;}
+    .analogy-text{font-size:.88rem;}
+
+    /* COMPARE TABLE — make scrollable */
+    .compare-table-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch;border-radius:var(--r);}
+    .compare-table{min-width:480px;font-size:.78rem;}
+    .compare-table th,.compare-table td{padding:8px 9px;white-space:nowrap;}
+
+    /* COVERAGE */
+    .coverage-grid{grid-template-columns:1fr;}
+    .cov-text{font-size:.8rem;}
+
+    /* PHASES */
+    .ph-hdr,.phase-hdr{padding:.9rem 1rem;flex-wrap:wrap;gap:.5rem;}
+    .ph-num{width:33px;height:33px;font-size:.9rem;}
+    .ph-title{font-size:.88rem;}
+    .ph-ta{font-size:.72rem;}
+    .ph-badge{font-size:.65rem;padding:3px 8px;}
+    .phase-body,.proj-body{padding:1rem;}
+    .topics-g{grid-template-columns:1fr;}
+    .t-item{padding:8px 10px;}
+    .t-chk{width:15px;height:15px;font-size:.6rem;}
+
+    /* CODE */
+    .code-block{font-size:.72rem;padding:.9rem 1rem;overflow-x:auto;-webkit-overflow-scrolling:touch;}
+    .lang-tag{font-size:.6rem;}
+
+    /* CERTS */
+    .cert-g{grid-template-columns:1fr;}
+    .cert-card{padding:1rem;gap:.75rem;}
+    .cert-ico{width:42px;height:42px;font-size:1.2rem;}
+    .cert-name{font-size:.85rem;}
+    .cert-desc{font-size:.77rem;}
+
+    /* PROJECTS */
+    .proj-g{grid-template-columns:1fr;}
+    .proj-hdr{padding:.8rem 1rem;}
+    .proj-icon{font-size:1.1rem;}
+    .proj-title{font-size:.85rem;}
+    .proj-ta{font-size:.68rem;}
+    .diff{font-size:.6rem;padding:2px 7px;}
+    .proj-desc{font-size:.8rem;}
+    .proj-ta-desc{font-size:.72rem;}
+    .sk{font-size:.65rem;}
+
+    /* TOOLS */
+    .tools-g{grid-template-columns:1fr 1fr;}
+    .tool-c{padding:.9rem;}
+    .tool-n{font-size:.85rem;}
+    .tool-d{font-size:.75rem;}
+
+    /* TIMELINE */
+    .tl{padding-left:1.75rem;}
+    .tl-dot{left:-1.6rem;width:11px;height:11px;}
+    .tl-t{font-size:.88rem;}
+    .tl-d{font-size:.78rem;}
+
+    /* CHEATSHEET */
+    .cheat-g{grid-template-columns:1fr;}
+    .cheat-code{font-size:.73rem;padding:.8rem 1rem;}
+
+    /* CAREER */
+    .career-g{grid-template-columns:1fr;}
+    .career-c{padding:1.1rem;}
+    .career-ico{font-size:1.5rem;}
+    .career-t{font-size:.9rem;}
+    .career-sal{font-size:.77rem;}
+
+    /* NOTICE */
+    .notice{padding:1rem 1.1rem;}
+    .notice-title{font-size:.88rem;}
+    .notice-text{font-size:.82rem;}
+    .companies{gap:.5rem;}
+    .co-tag{font-size:.78rem;padding:6px 12px;}
+
+    /* FOOTER */
+    footer{padding:2rem 1rem;font-size:.8rem;}
+  }
+
+  /* ============================================================
+     RESPONSIVE — Small Mobile (≤380px)
+  ============================================================ */
+  @media(max-width:380px){
+    .hero h1{font-size:1.45rem;}
+    .tools-g{grid-template-columns:1fr;}
+    .hero-stats{flex-direction:column;gap:.75rem;align-items:center;}
+    .compare-table{min-width:420px;}
+    .cert-card{flex-direction:column;}
+    .cert-ico{width:38px;height:38px;}
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-logo">
+    <span class="tf-b">TF</span>
+    TensorFlow Masterclass
+    <span class="lang-pill">🇮🇳 Tanglish</span>
+  </div>
+  <ul class="nav-links" id="navLinks">
+    <li><a href="#why" onclick="closeMenu()">ஏன் Use?</a></li>
+    <li><a href="#coverage" onclick="closeMenu()">Coverage</a></li>
+    <li><a href="#roadmap" onclick="closeMenu()">Roadmap</a></li>
+    <li><a href="#certs" onclick="closeMenu()">Certificates</a></li>
+    <li><a href="#projects" onclick="closeMenu()">Projects</a></li>
+    <li><a href="#cheat" onclick="closeMenu()">Cheatsheet</a></li>
+  </ul>
+  <button class="ham-btn" id="hamBtn" onclick="toggleMenu()" aria-label="Menu">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+<div class="mobile-menu" id="mobileMenu">
+  <a href="#why" onclick="closeMenu()">ஏன் Use?</a>
+  <a href="#coverage" onclick="closeMenu()">Coverage</a>
+  <a href="#roadmap" onclick="closeMenu()">Roadmap</a>
+  <a href="#certs" onclick="closeMenu()">Certificates</a>
+  <a href="#projects" onclick="closeMenu()">Projects</a>
+  <a href="#cheat" onclick="closeMenu()">Cheatsheet</a>
+</div>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-eyebrow">🧠 Tanglish Version · Updated 2025 · Beginner to Pro</div>
+  <p class="hero-tamil">TensorFlow என்னன்னு தமிழ்ல புரிஞ்சுக்கலாம் வாங்க!</p>
+  <h1>TensorFlow <span>Masterclass</span><br>Beginner to Pro</h1>
+  <p class="hero-sub">ஏன் Google, Uber, Twitter எல்லாரும் TensorFlow use பண்றாங்க? — Simple Tanglish-la explain பண்ணிருக்கோம். Plus complete syllabus coverage check with missing topics added!</p>
+  <div class="hero-stats">
+    <div class="hero-stat"><strong>7</strong><span>Learning Phases</span></div>
+    <div class="hero-stat"><strong>55+</strong><span>Topics (Updated)</span></div>
+    <div class="hero-stat"><strong>12+</strong><span>Free Certs</span></div>
+    <div class="hero-stat"><strong>10</strong><span>Reasons Why TF</span></div>
+  </div>
+  <div class="hero-btns">
+    <a href="#why" class="btn-primary">ஏன் Use பண்றாங்க? 🤔</a>
+    <a href="#roadmap" class="btn-outline">Complete Roadmap ↓</a>
+  </div>
+</section>
+
+<!-- WHY SECTION -->
+<section class="sec" id="why">
+  <div class="sec-in">
+    <div class="sec-tag">ஏன் TensorFlow?</div>
+    <div class="sec-title">ஏன் எல்லாரும் TensorFlow Use பண்றாங்க?</div>
+    <p class="sec-sub">Simple-a சொல்லணும்னா — TensorFlow is the world's most used ML framework. But why? Tanglish-la பார்க்கலாம்!</p>
+
+    <!-- Big Analogy -->
+    <div class="analogy">
+      <div class="analogy-label">🎯 Simple Analogy — புரிஞ்சுக்க Easy</div>
+      <div class="analogy-text">
+        நம்ம brain எப்படி work பண்றதோ — <span class="hi">neurons connect ஆகி, learn பண்ணி, decisions எடுக்குது</span> — அதே மாதிரி TensorFlow ஒரு <span class="hi">computer brain builder</span>. நீ data குடுக்கிற, அது pattern கத்துக்குது, next time automatically correct answer சொல்லுது.<br><br>
+        Example: 1000 cat photos பாத்து கத்துக்கிற — 1001வது photo பாத்தாலும் "இது cat!" சொல்லும். இதை தான் Machine Learning சொல்றோம். TensorFlow அந்த learning process-ஐ code-la பண்ண help பண்றது!
+      </div>
+    </div>
+
+    <!-- Big WHY BOX -->
+    <div class="why-hero">
+      <div class="why-title">🔥 10 Reasons Why Everyone Uses TensorFlow</div>
+      <div class="why-grid">
+
+        <div class="why-card">
+          <div class="why-card-q">Reason 1 — Google Made It 🏢</div>
+          <div class="why-card-a">Google-ஓட சொந்த engineers develop பண்ணாங்க. <strong>Google Search, YouTube recommendations, Gmail Smart Reply</strong> — எல்லாத்திலயும் TensorFlow use ஆகுது. Google use பண்றது trust-worthy தான்ல?</div>
+        </div>
+
+        <div class="why-card">
+          <div class="why-card-q">Reason 2 — Free & Open Source 🆓</div>
+          <div class="why-card-a">100% <strong>free to use</strong>. Big companies-கூட pay பண்ணாம use பண்ணலாம். License இல்ல, cost இல்ல. Open source means millions of developers improve பண்றாங்க constantly.</div>
+        </div>
+
+        <div class="why-card">
+          <div class="why-card-q">Reason 3 — எங்கும் Run ஆகும் 🌍</div>
+          <div class="why-card-a">ஒரே code — <strong>Server-la, Phone-la, Browser-la, Raspberry Pi-ல</strong> — எங்கும் run ஆகும். Write once, deploy everywhere. இது மத்த frameworks-கிட்ட இல்லாத superpower!</div>
+        </div>
+
+        <div class="why-card">
+          <div class="why-card-q">Reason 4 — Jobs & Salary 💰</div>
+          <div class="why-card-a"><strong>Google, Amazon, Uber, Airbnb, Twitter, Intel, IBM</strong> — எல்லாரும் TF developers hire பண்றாங்க. India-ல ₹8–30 LPA, US-ல $130K–200K. TF தெரிஞ்சா career set!</div>
+        </div>
+
+        <div class="why-card">
+          <div class="why-card-q">Reason 5 — Keras Easy API 😍</div>
+          <div class="why-card-a">முன்னாடி ML மிகவும் complex ஆ இருந்துச்சு. Keras API வந்த பிறகு <strong>5 lines of code-ல neural network</strong> build பண்ணலாம். Beginners-கு perfect!</div>
+        </div>
+
+        <div class="why-card">
+          <div class="why-card-q">Reason 6 — GPU Speed ⚡</div>
+          <div class="why-card-a">Normal code CPU-ல run ஆகும். TF <strong>GPU-ல automatically run ஆகும்</strong> — 10x–100x faster! Training-ku hours ஆகுதா? GPU-ல minutes-ல முடியும்.</div>
+        </div>
+
+        <div class="why-card">
+          <div class="why-card-q">Reason 7 — Huge Community 👥</div>
+          <div class="why-card-a">Millions of developers use பண்றாங்க. <strong>Stack Overflow, GitHub, YouTube tutorials</strong> — எந்த problem வந்தாலும் solution கிடைக்கும். நீ alone இல்ல!</div>
+        </div>
+
+        <div class="why-card">
+          <div class="why-card-q">Reason 8 — Production Ready 🚀</div>
+          <div class="why-card-a">Research-ல மட்டும் இல்ல — <strong>millions of users-கு serve பண்ணலாம்</strong>. TF Serving, Kubernetes-ல scale பண்ணலாம். Real products-ku use பண்ண perfect.</div>
+        </div>
+
+        <div class="why-card">
+          <div class="why-card-q">Reason 9 — Pre-trained Models 🧠</div>
+          <div class="why-card-a">Scratch-ல start பண்ண வேண்டாம். TF Hub-ல <strong>Google-ஓட ready-made BERT, ResNet, MobileNet</strong> — இதுல fine-tune பண்ணி 1 day-ல app ready!</div>
+        </div>
+
+        <div class="why-card">
+          <div class="why-card-q">Reason 10 — Future is AI 🔮</div>
+          <div class="why-card-a">2030-ல எல்லா software-லயும் AI இருக்கும். <strong>TF தெரிஞ்சவங்களுக்கு future guaranteed</strong>. Doctors, Teachers, Engineers — எல்லாரும் AI tools use பண்ணுவாங்க.</div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Companies -->
+    <div class="notice">
+      <div class="notice-title">🏢 யாரெல்லாம் TensorFlow Use பண்றாங்க?</div>
+      <div class="notice-text">இந்த companies எல்லாம் production-ல TensorFlow use பண்றாங்க:</div>
+      <div class="companies">
+        <span class="co-tag">🔍 Google</span>
+        <span class="co-tag">📦 Uber</span>
+        <span class="co-tag">🏠 Airbnb</span>
+        <span class="co-tag">🐦 Twitter / X</span>
+        <span class="co-tag">🔵 Intel</span>
+        <span class="co-tag">🔵 IBM</span>
+        <span class="co-tag">🧠 DeepMind</span>
+        <span class="co-tag">📱 Snapchat</span>
+        <span class="co-tag">🎵 Spotify</span>
+        <span class="co-tag">🛒 Flipkart</span>
+        <span class="co-tag">💊 Practo</span>
+        <span class="co-tag">🚗 Ola</span>
+      </div>
+    </div>
+
+    <!-- TF vs PyTorch -->
+    <h3 style="font-size:1.1rem;font-weight:800;color:var(--g800);margin-bottom:1rem;">⚔️ TensorFlow vs PyTorch — எது Better?</h3>
+    <div class="compare-table-wrap"><table class="compare-table">
+      <thead>
+        <tr><th>Feature</th><th>TensorFlow</th><th>PyTorch</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>யாரு build பண்ணாங்க?</td><td>Google</td><td>Meta (Facebook)</td></tr>
+        <tr><td>Production use</td><td><span class="check">✅ Industry standard</span></td><td><span class="check">✅ Growing fast</span></td></tr>
+        <tr><td>Research use</td><td>Medium</td><td><span class="check">✅ More popular</span></td></tr>
+        <tr><td>Mobile deployment</td><td><span class="check">✅ TF Lite (best)</span></td><td>Limited</td></tr>
+        <tr><td>Browser ML</td><td><span class="check">✅ TF.js</span></td><td>Limited</td></tr>
+        <tr><td>Jobs market</td><td><span class="check">✅ More jobs</span></td><td>Growing</td></tr>
+        <tr><td>Learning curve</td><td>Medium (Keras easy)</td><td>Easier syntax</td></tr>
+        <tr><td>Verdict</td><td><strong style="color:var(--g700);">🏆 Production & Jobs</strong></td><td>Research & Flexibility</td></tr>
+      </tbody>
+    </table></div>
+    <p style="font-size:.82rem;color:var(--gr500);margin-top:.75rem;">💡 Tip: TF கத்துக்க — jobs கிடைக்கும். PyTorch கத்துக்க — research பண்ணலாம். Both கத்துக்கிறது best!</p>
+  </div>
+</section>
+
+<!-- COVERAGE CHECK -->
+<section class="sec sec-alt" id="coverage">
+  <div class="sec-in">
+    <div class="sec-tag">Syllabus Review</div>
+    <div class="sec-title">முந்தைய Version-ல என்ன Cover ஆச்சு? என்ன Missing?</div>
+    <p class="sec-sub">Previous masterclass-ஐ industry syllabus-வோட compare பண்ணி — missing topics add பண்ணிருக்கோம்.</p>
+
+    <div class="notice" style="background:#f0fdf4;border-color:var(--g400);">
+      <div class="notice-title">✅ Well Covered Topics (40+ topics)</div>
+      <div class="notice-text">Phase 1–6 topics mostly covered. CNNs, LSTMs, Transformers, GANs, TFLite, Deployment — எல்லாம் இருந்துச்சு. Below are the extra topics added in this version:</div>
+    </div>
+
+    <div class="coverage-grid">
+      <div class="cov-item cov-yes"><span class="cov-icon">✅</span><div class="cov-text">Tensors, Operations, Variables<span class="cov-badge badge-ok">Covered</span></div></div>
+      <div class="cov-item cov-yes"><span class="cov-icon">✅</span><div class="cov-text">Keras Sequential & Functional API<span class="cov-badge badge-ok">Covered</span></div></div>
+      <div class="cov-item cov-yes"><span class="cov-icon">✅</span><div class="cov-text">CNN, Transfer Learning<span class="cov-badge badge-ok">Covered</span></div></div>
+      <div class="cov-item cov-yes"><span class="cov-icon">✅</span><div class="cov-text">LSTM, GRU, RNN<span class="cov-badge badge-ok">Covered</span></div></div>
+      <div class="cov-item cov-yes"><span class="cov-icon">✅</span><div class="cov-text">Transformers, BERT, Attention<span class="cov-badge badge-ok">Covered</span></div></div>
+      <div class="cov-item cov-yes"><span class="cov-icon">✅</span><div class="cov-text">GANs, VAEs, Autoencoders<span class="cov-badge badge-ok">Covered</span></div></div>
+      <div class="cov-item cov-yes"><span class="cov-icon">✅</span><div class="cov-text">TF Serving, TFLite, TF.js<span class="cov-badge badge-ok">Covered</span></div></div>
+      <div class="cov-item cov-yes"><span class="cov-icon">✅</span><div class="cov-text">TFX MLOps Pipeline<span class="cov-badge badge-ok">Covered</span></div></div>
+      <div class="cov-item cov-yes"><span class="cov-icon">✅</span><div class="cov-text">GradientTape Custom Training<span class="cov-badge badge-ok">Covered</span></div></div>
+      <div class="cov-item cov-yes"><span class="cov-icon">✅</span><div class="cov-text">Keras Tuner Hyperparameter Search<span class="cov-badge badge-ok">Covered</span></div></div>
+      <div class="cov-item cov-new"><span class="cov-icon">🆕</span><div class="cov-text">Reinforcement Learning with TF<span class="cov-badge badge-new">Newly Added</span></div></div>
+      <div class="cov-item cov-new"><span class="cov-icon">🆕</span><div class="cov-text">Recommender Systems (TF Recommenders)<span class="cov-badge badge-new">Newly Added</span></div></div>
+      <div class="cov-item cov-new"><span class="cov-icon">🆕</span><div class="cov-text">Distributed Training (Multi-GPU, TPU)<span class="cov-badge badge-new">Newly Added</span></div></div>
+      <div class="cov-item cov-new"><span class="cov-icon">🆕</span><div class="cov-text">Responsible AI & TF Fairness<span class="cov-badge badge-new">Newly Added</span></div></div>
+      <div class="cov-item cov-new"><span class="cov-icon">🆕</span><div class="cov-text">Object Detection (SSD, YOLO via TF Hub)<span class="cov-badge badge-new">Newly Added</span></div></div>
+      <div class="cov-item cov-new"><span class="cov-icon">🆕</span><div class="cov-text">Image Segmentation (U-Net)<span class="cov-badge badge-new">Newly Added</span></div></div>
+      <div class="cov-item cov-new"><span class="cov-icon">🆕</span><div class="cov-text">Federated Learning (Privacy ML)<span class="cov-badge badge-new">Newly Added</span></div></div>
+      <div class="cov-item cov-new"><span class="cov-icon">🆕</span><div class="cov-text">TF Privacy (Differential Privacy)<span class="cov-badge badge-new">Newly Added</span></div></div>
+      <div class="cov-item cov-new"><span class="cov-icon">🆕</span><div class="cov-text">Chatbot / Seq2Seq / Dialogue Systems<span class="cov-badge badge-new">Newly Added</span></div></div>
+      <div class="cov-item cov-new"><span class="cov-icon">🆕</span><div class="cov-text">TF Model Debugging & Profiling<span class="cov-badge badge-new">Newly Added</span></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- FULL ROADMAP (7 phases now) -->
+<section class="sec" id="roadmap">
+  <div class="sec-in">
+    <div class="sec-tag">Complete Roadmap</div>
+    <div class="sec-title">7-Phase Learning Roadmap (Updated)</div>
+    <p class="sec-sub">Phase 7 புதுசா add பண்ணிருக்கோம் — Reinforcement Learning, Recommenders, Distributed Training & Responsible AI.</p>
+
+    <!-- PHASE 1 -->
+    <div class="phase">
+      <div class="phase-hdr">
+        <div class="ph-num">1</div>
+        <div class="ph-meta">
+          <div class="ph-title">Foundations — Python, Math & ML Basics</div>
+          <div class="ph-ta">🗣 அடிப்படை — எந்த ML framework-கும் இது வேணும்</div>
+        </div>
+        <span class="ph-badge b-beg">Beginner</span>
+      </div>
+      <div class="phase-body">
+        <div class="topics-g">
+          <div class="t-item"><div class="t-chk">✓</div><div><div>Python basics — lists, loops, functions</div><span class="t-ta">Python தெரிஞ்சிருக்கணும்</span></div></div>
+          <div class="t-item"><div class="t-chk">✓</div><div><div>NumPy — arrays & matrix math</div><span class="t-ta">Numbers-ஐ fast-ஆ process பண்ண</span></div></div>
+          <div class="t-item"><div class="t-chk">✓</div><div><div>Linear Algebra — vectors, matrices</div><span class="t-ta">Neural networks-ஓட backbone</span></div></div>
+          <div class="t-item"><div class="t-chk">✓</div><div><div>Calculus — derivatives, chain rule</div><span class="t-ta">Model எப்படி learn பண்றதுன்னு புரியும்</span></div></div>
+          <div class="t-item"><div class="t-chk">✓</div><div><div>Probability & Statistics</div><span class="t-ta">Data புரிஞ்சுக்க வேணும்</span></div></div>
+          <div class="t-item"><div class="t-chk">✓</div><div><div>Pandas — data manipulation</div><span class="t-ta">Excel மாதிரி code-ல data handle</span></div></div>
+          <div class="t-item"><div class="t-chk">✓</div><div><div>Matplotlib & Seaborn visualizations</div><span class="t-ta">Graph-a பாத்து data புரிஞ்சுக்க</span></div></div>
+          <div class="t-item"><div class="t-chk">✓</div><div><div>Scikit-learn overview & ML types</div><span class="t-ta">Supervised vs Unsupervised என்னன்னு</span></div></div>
+        </div>
+        <div class="code-block">
+          <span class="lang-tag">PYTHON</span>
+<span class="cm"># Tamil explain: Matrix multiplication = neural network-ோட heart</span>
+<span class="kw">import</span> numpy <span class="kw">as</span> np
+A = np.<span class="fn">array</span>([[<span class="num">1</span>,<span class="num">2</span>],[<span class="num">3</span>,<span class="num">4</span>]])
+B = np.<span class="fn">array</span>([[<span class="num">5</span>,<span class="num">6</span>],[<span class="num">7</span>,<span class="num">8</span>]])
+C = np.<span class="fn">dot</span>(A, B)  <span class="cm"># → [[19,22],[43,50]]</span>
+<span class="fn">print</span>(<span class="str">"Matrix result:"</span>, C)</div>
+        <div class="ph-time">⏱ Time: <strong>3–4 weeks</strong> &nbsp;|&nbsp; 🗣 <em>இது தெரியாம TensorFlow start பண்ண வேண்டாம்!</em></div>
+      </div>
+    </div>
+
+    <!-- PHASE 2 -->
+    <div class="phase">
+      <div class="phase-hdr">
+        <div class="ph-num">2</div>
+        <div class="ph-meta">
+          <div class="ph-title">TensorFlow Core — Tensors, Ops & Keras API</div>
+          <div class="ph-ta">🗣 TF-ஓட basic building blocks — இது தெரிஞ்சா மேல போகலாம்</div>
+        </div>
+        <span class="ph-badge b-beg">Beginner</span>
+      </div>
+      <div class="phase-body">
+        <div class="topics-g">
+          <div class="t-item"><div class="t-chk">✓</div><div><div>Install TF 2.x (GPU + CPU)</div><span class="t-ta">Setup பண்றது</span></div></div>
+          <div class="t-item"><div class="t-chk">✓</div><div><div>Tensor — shapes, dtypes, operations</div><span class="t-ta">TF-ஓட data type புரிஞ்சுக்க</span></div></div>
+          <div class="t-item"><div class="t-chk">✓</div><div><div>tf.Variable vs tf.constant</div><span class="t-ta">Change ஆகுமா, ஆகாதா?</span></div></div>
+          <div class="t-item"><div class="t-chk">✓</div><div><div>GradientTape — auto differentiation</div><span class="t-ta">Model தானா learn பண்றது இதனால</span></div></div>
+          <div class="t-item"><div class="t-chk">✓</div><div><div>Keras Sequential API</div><span class="t-ta">5 lines-ல network build!</span></div></div>
+          <div class="t-item"><div class="t-chk">✓</div><div><div>Dense layers, Activations (ReLU, Sigmoid)</div><span class="t-ta">நம்ம brain neurons மாதிரி</span></div></div>
+          <div class="t-item"><div class="t-chk">✓</div><div><div>Loss functions & Optimizers</div><span class="t-ta">Model எவ்வளவு wrong-ன்னு measure</span></div></div>
+          <div class="t-item"><div class="t-chk">✓</div><div><div>model.compile() → model.fit()</div><span class="t-ta">Train பண்றது super easy</span></div></div>
+        </div>
+        <div class="code-block">
+          <span class="lang-tag">TF CORE</span>
+<span class="kw">import</span> tensorflow <span class="kw">as</span> tf
+
+<span class="cm"># Tamil: Tensor = TF-ஓட data type. NumPy array மாதிரியே!</span>
+t = tf.<span class="fn">constant</span>([[<span class="num">1.</span>, <span class="num">2.</span>], [<span class="num">3.</span>, <span class="num">4.</span>]])
+<span class="fn">print</span>(t.shape)  <span class="cm"># (2, 2)</span>
+
+<span class="cm"># Simple neural network — 5 lines only!</span>
+model = tf.keras.<span class="fn">Sequential</span>([
+    tf.keras.layers.<span class="fn">Dense</span>(<span class="num">64</span>, activation=<span class="str">'relu'</span>, input_shape=(<span class="num">10</span>,)),
+    tf.keras.layers.<span class="fn">Dense</span>(<span class="num">1</span>, activation=<span class="str">'sigmoid'</span>)
+])
+model.<span class="fn">compile</span>(optimizer=<span class="str">'adam'</span>, loss=<span class="str">'binary_crossentropy'</span>, metrics=[<span class="str">'accuracy'</span>])</div>
+        <div class="ph-time">⏱ Time: <strong>3–4 weeks</strong></div>
+      </div>
+    </div>
+
+    <!-- PHASE 3 -->
+    <div class="phase">
+      <div class="phase-hdr">
+        <div class="ph-num">3</div>
+        <div class="ph-meta">
+          <div class="ph-title">Computer Vision — CNNs + Object Detection + Segmentation</div>
+          <div class="ph-ta">🗣 Camera-ல பார்க்குறதை computer-கு கத்துக்குடுக்கிறோம்!</div>
+        </div>
+        <span class="ph-badge b-int">Intermediate</span>
+      </div>
+      <div class="phase-body">
+        <div class="topics-g">
+          <div class="t-item"><div class="t-chk">✓</div><div><div>Convolutional layers — filters & kernels</div><span class="t-ta">Image-ல patterns கண்டுபிடிக்க</span></div></div>
+          <div class="t-item"><div class="t-chk">✓</div><div><div>Pooling, BatchNorm, Dropout</div><span class="t-ta">Overfitting தடுக்க</span></div></div>
+          <div class="t-item"><div class="t-chk">✓</div><div><div>Transfer Learning (EfficientNet, ResNet)</div><span class="t-ta">Google-ஓட model use பண்ணி fast learn</span></div></div>
+          <div class="t-item"><div class="t-chk">✓</div><div><div>tf.data pipeline for large datasets</div><span class="t-ta">Millions of images handle பண்ண</span></div></div>
+          <div class="t-item"><div class="t-chk">✓</div><div><div>Data augmentation</div><span class="t-ta">Less data-ஐ more-ஆ பண்ண trick</span></div></div>
+          <div class="t-item"><div class="t-chk">✓</div><div><div>Object Detection — SSD MobileNet<span class="new-badge">UPDATED</span></div><span class="t-ta">Photo-ல எத்தனை objects இருக்குன்னு கண்டுபிடி</span></div></div>
+          <div class="t-item"><div class="t-chk">✓</div><div><div>YOLO via TF Hub<span class="new-badge">NEW</span></div><span class="t-ta">Real-time detection — super fast</span></div></div>
+          <div class="t-item"><div class="t-chk">✓</div><div><div>Image Segmentation — U-Net<span class="new-badge">NEW</span></div><span class="t-ta">Medical imaging, autonomous cars use பண்றது</span></div></div>
+        </div>
+        <div class="ph-time">⏱ Time: <strong>4–5 weeks</strong> &nbsp;|&nbsp; 🗣 <em>Project: Plant disease detection, Face recognition</em></div>
+      </div>
+    </div>
+
+    <!-- PHASE 4 -->
+    <div class="phase">
+      <div class="phase-hdr">
+        <div class="ph-num">4</div>
+        <div class="ph-meta">
+          <div class="ph-title">NLP & Sequences — Text, BERT, Transformers, Time Series</div>
+          <div class="ph-ta">🗣 Computer-கு Tamil/English text புரிய வைக்கிறோம்!</div>
+        </div>
+        <span class="ph-badge b-int">Intermediate</span>
+      </div>
+      <div class="phase-body">
+        <div class="topics-g">
+          <div class="t-item"><div class="t-chk">✓</div><div><div>Tokenization & Word Embeddings</div><span class="t-ta">Words-ஐ numbers-ஆ மாத்துவது</span></div></div>
+          <div class="t-item"><div class="t-chk">✓</div><div><div>RNN, LSTM, GRU</div><span class="t-ta">Sequence data-ஐ understand பண்ண</span></div></div>
+          <div class="t-item"><div class="t-chk">✓</div><div><div>Attention Mechanism & Transformers</div><span class="t-ta">ChatGPT-ஓட base architecture</span></div></div>
+          <div class="t-item"><div class="t-chk">✓</div><div><div>BERT fine-tuning with HuggingFace</div><span class="t-ta">Google-ஓட pre-trained NLP model</span></div></div>
+          <div class="t-item"><div class="t-chk">✓</div><div><div>Time Series Forecasting</div><span class="t-ta">Stock price, weather predict பண்ண</span></div></div>
+          <div class="t-item"><div class="t-chk">✓</div><div><div>Seq2Seq + Chatbot<span class="new-badge">NEW</span></div><span class="t-ta">Question-ku automatic answer சொல்ல</span></div></div>
+          <div class="t-item"><div class="t-chk">✓</div><div><div>Sentiment Analysis</div><span class="t-ta">Review positive-a negative-a?</span></div></div>
+          <div class="t-item"><div class="t-chk">✓</div><div><div>Text Generation with LSTMs</div><span class="t-ta">AI poetry, story write பண்ண!</span></div></div>
+        </div>
+        <div class="ph-time">⏱ Time: <strong>5–6 weeks</strong></div>
+      </div>
+    </div>
+
+    <!-- PHASE 5 -->
+    <div class="phase">
+      <div class="phase-hdr">
+        <div class="ph-num">5</div>
+        <div class="ph-meta">
+          <div class="ph-title">Advanced TF — Custom Loops, GANs, VAEs & Model Optimization</div>
+          <div class="ph-ta">🗣 இப்போ TF-ஓட full control உன் கையில!</div>
+        </div>
+        <span class="ph-badge b-adv">Advanced</span>
+      </div>
+      <div class="phase-body">
+        <div class="topics-g">
+          <div class="t-item"><div class="t-chk">✓</div><div><div>Keras Functional API — complex models</div><span class="t-ta">Multiple input/output networks</span></div></div>
+          <div class="t-item"><div class="t-chk">✓</div><div><div>Custom training loops with GradientTape</div><span class="t-ta">Full control over training</span></div></div>
+          <div class="t-item"><div class="t-chk">✓</div><div><div>Custom layers, losses & metrics</div><span class="t-ta">உன்னோட own functions எழுது</span></div></div>
+          <div class="t-item"><div class="t-chk">✓</div><div><div>GANs — image generation</div><span class="t-ta">Fake faces, art generate பண்ண</span></div></div>
+          <div class="t-item"><div class="t-chk">✓</div><div><div>VAEs — Variational Autoencoders</div><span class="t-ta">Data compress + generate</span></div></div>
+          <div class="t-item"><div class="t-chk">✓</div><div><div>Mixed precision training</div><span class="t-ta">GPU memory save பண்ணி fast train</span></div></div>
+          <div class="t-item"><div class="t-chk">✓</div><div><div>Keras Tuner — hyperparameter search</div><span class="t-ta">Best settings automatically find</span></div></div>
+          <div class="t-item"><div class="t-chk">✓</div><div><div>Model Profiling & Debugging<span class="new-badge">NEW</span></div><span class="t-ta">Slow-ஆ இருக்கான்னு கண்டுபிடி</span></div></div>
+        </div>
+        <div class="ph-time">⏱ Time: <strong>5–6 weeks</strong></div>
+      </div>
+    </div>
+
+    <!-- PHASE 6 -->
+    <div class="phase">
+      <div class="phase-hdr">
+        <div class="ph-num">6</div>
+        <div class="ph-meta">
+          <div class="ph-title">Production & Deployment — Serve, Mobile, Edge, Cloud</div>
+          <div class="ph-ta">🗣 Model build பண்ணி real world-ல use பண்றது இப்போ!</div>
+        </div>
+        <span class="ph-badge b-adv">Advanced</span>
+      </div>
+      <div class="phase-body">
+        <div class="topics-g">
+          <div class="t-item"><div class="t-chk">✓</div><div><div>SavedModel format & export</div><span class="t-ta">Model save பண்ண</span></div></div>
+          <div class="t-item"><div class="t-chk">✓</div><div><div>TF Serving with Docker & REST API</div><span class="t-ta">Millions of users-கு serve</span></div></div>
+          <div class="t-item"><div class="t-chk">✓</div><div><div>TFLite — Mobile & Embedded</div><span class="t-ta">Phone-ல offline run ஆகும்</span></div></div>
+          <div class="t-item"><div class="t-chk">✓</div><div><div>TensorFlow.js — Browser ML</div><span class="t-ta">Website-ல AI run பண்ணலாம்</span></div></div>
+          <div class="t-item"><div class="t-chk">✓</div><div><div>Model Quantization & Pruning</div><span class="t-ta">Small phone-ல fast run ஆக</span></div></div>
+          <div class="t-item"><div class="t-chk">✓</div><div><div>TFX — MLOps Pipelines</div><span class="t-ta">Auto retrain, monitor, deploy</span></div></div>
+          <div class="t-item"><div class="t-chk">✓</div><div><div>FastAPI wrapper for models</div><span class="t-ta">Python API எழுது</span></div></div>
+          <div class="t-item"><div class="t-chk">✓</div><div><div>Google Cloud / Vertex AI deploy</div><span class="t-ta">Cloud-ல scale பண்ண</span></div></div>
+        </div>
+        <div class="code-block">
+          <span class="lang-tag">DEPLOY</span>
+<span class="cm"># Tamil: Model-ஐ save பண்ணி API-ஆ serve பண்றது</span>
+model.<span class="fn">save</span>(<span class="str">'my_model'</span>)
+
+<span class="cm"># TFLite convert — Phone-ல use பண்ண</span>
+converter = tf.lite.TFLiteConverter.<span class="fn">from_saved_model</span>(<span class="str">'my_model'</span>)
+converter.optimizations = [tf.lite.Optimize.DEFAULT]
+tflite_model = converter.<span class="fn">convert</span>()
+
+<span class="cm"># FastAPI REST endpoint</span>
+<span class="kw">from</span> fastapi <span class="kw">import</span> FastAPI
+app = <span class="fn">FastAPI</span>()
+<span class="fn">@app.post</span>(<span class="str">"/predict"</span>)
+<span class="kw">async def</span> <span class="fn">predict</span>(data: InputData):
+    <span class="kw">return</span> {<span class="str">"result"</span>: model.<span class="fn">predict</span>(data.values).<span class="fn">tolist</span>()}</div>
+        <div class="ph-time">⏱ Time: <strong>4–5 weeks</strong></div>
+      </div>
+    </div>
+
+    <!-- PHASE 7 — NEW -->
+    <div class="phase" style="border-color:#c4b5fd;">
+      <div class="phase-hdr" style="background:#f5f3ff;border-color:#c4b5fd;">
+        <div class="ph-num" style="background:#7c3aed;">7</div>
+        <div class="ph-meta">
+          <div class="ph-title">🆕 Expert Topics — RL, Recommenders, Distributed Training & Responsible AI</div>
+          <div class="ph-ta">🗣 இது தெரிஞ்சா நீ truly Pro level TF developer!</div>
+        </div>
+        <span class="ph-badge b-pro">Pro / Expert</span>
+      </div>
+      <div class="phase-body">
+        <div class="topics-g">
+          <div class="t-item" style="background:#f5f3ff;border-color:#c4b5fd;"><div class="t-chk" style="background:#7c3aed;">✓</div><div><div>Reinforcement Learning with TF-Agents<span class="new-badge">NEW</span></div><span class="t-ta">Game-ல AI தானா learn பண்ண — DQN, PPO</span></div></div>
+          <div class="t-item" style="background:#f5f3ff;border-color:#c4b5fd;"><div class="t-chk" style="background:#7c3aed;">✓</div><div><div>TF Recommenders — Recommendation Systems<span class="new-badge">NEW</span></div><span class="t-ta">Netflix, Amazon-மாதிரி "You may also like"</span></div></div>
+          <div class="t-item" style="background:#f5f3ff;border-color:#c4b5fd;"><div class="t-chk" style="background:#7c3aed;">✓</div><div><div>Distributed Training (MirroredStrategy)<span class="new-badge">NEW</span></div><span class="t-ta">Multiple GPU-ல parallel train பண்ண</span></div></div>
+          <div class="t-item" style="background:#f5f3ff;border-color:#c4b5fd;"><div class="t-chk" style="background:#7c3aed;">✓</div><div><div>TPU Training on Google Colab<span class="new-badge">NEW</span></div><span class="t-ta">Google-ஓட special AI chips use பண்ண</span></div></div>
+          <div class="t-item" style="background:#f5f3ff;border-color:#c4b5fd;"><div class="t-chk" style="background:#7c3aed;">✓</div><div><div>Federated Learning<span class="new-badge">NEW</span></div><span class="t-ta">Data share பண்ணாம ML — Privacy-first</span></div></div>
+          <div class="t-item" style="background:#f5f3ff;border-color:#c4b5fd;"><div class="t-chk" style="background:#7c3aed;">✓</div><div><div>TF Privacy & Differential Privacy<span class="new-badge">NEW</span></div><span class="t-ta">Medical data-ஐ safely train பண்ண</span></div></div>
+          <div class="t-item" style="background:#f5f3ff;border-color:#c4b5fd;"><div class="t-chk" style="background:#7c3aed;">✓</div><div><div>Responsible AI & Bias Detection<span class="new-badge">NEW</span></div><span class="t-ta">Fair, ethical AI build பண்றது</span></div></div>
+          <div class="t-item" style="background:#f5f3ff;border-color:#c4b5fd;"><div class="t-chk" style="background:#7c3aed;">✓</div><div><div>TF.js Advanced — Browser Training<span class="new-badge">NEW</span></div><span class="t-ta">Browser-லயே model train பண்றது</span></div></div>
+        </div>
+        <div class="ph-time">⏱ Time: <strong>4–6 weeks</strong> &nbsp;|&nbsp; 🗣 <em>இது கத்துக்கிட்டா Top 5% TF Developer!</em></div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- FREE CERTIFICATES -->
+<section class="sec sec-alt" id="certs">
+  <div class="sec-in">
+    <div class="sec-tag">Free Certificates</div>
+    <div class="sec-title">Free-ஆ Certificate எடுப்பது எப்படி?</div>
+    <p class="sec-sub">இந்த platforms-ல free-ஆ கத்துக்கி certificate எடுக்கலாம். Resume-ல போடலாம்!</p>
+    <div class="cert-g">
+      <div class="cert-card">
+        <div class="cert-ico" style="background:#e7f5ff;">📘</div>
+        <div>
+          <div class="cert-name">DeepLearning.AI TF Specialization</div>
+          <div class="cert-prov">Coursera — Andrew Ng</div>
+          <span class="cert-free">Free Audit</span>
+          <div class="cert-desc">4 courses — best structured curriculum. Audit-பண்ணா free, certificate-ku pay பண்ணணும். Financial aid available!</div>
+          <a class="cert-link" href="https://www.coursera.org/professional-certificates/tensorflow-in-practice" target="_blank">coursera.org → Enroll Free ↗</a>
+        </div>
+      </div>
+      <div class="cert-card">
+        <div class="cert-ico" style="background:#e6fff0;">🏆</div>
+        <div>
+          <div class="cert-name">Kaggle — Intro to Deep Learning</div>
+          <div class="cert-prov">Kaggle</div>
+          <span class="cert-free">100% Free Certificate</span>
+          <div class="cert-desc">Complete-பண்ணா free certificate. Browser-லயே code run ஆகும். Kaggle profile-ல show ஆகும்.</div>
+          <a class="cert-link" href="https://www.kaggle.com/learn/intro-to-deep-learning" target="_blank">kaggle.com/learn ↗</a>
+        </div>
+      </div>
+      <div class="cert-card">
+        <div class="cert-ico" style="background:#f3f0ff;">⚡</div>
+        <div>
+          <div class="cert-name">Google Cloud Skills Boost</div>
+          <div class="cert-prov">Google</div>
+          <span class="cert-free">Free Badges</span>
+          <div class="cert-desc">Real Google Cloud-ல hands-on labs. Free skill badges earn பண்ணலாம். LinkedIn-ல add பண்ணலாம்.</div>
+          <a class="cert-link" href="https://www.cloudskillsboost.google" target="_blank">cloudskillsboost.google ↗</a>
+        </div>
+      </div>
+      <div class="cert-card">
+        <div class="cert-ico" style="background:#e6fff0;">🤗</div>
+        <div>
+          <div class="cert-name">HuggingFace NLP Course</div>
+          <div class="cert-prov">HuggingFace</div>
+          <span class="cert-free">Free Certificate</span>
+          <div class="cert-desc">Transformers, BERT, NLP — complete ketta free certificate. TF + HF integration covers பண்றாங்க.</div>
+          <a class="cert-link" href="https://huggingface.co/learn/nlp-course" target="_blank">huggingface.co/learn ↗</a>
+        </div>
+      </div>
+      <div class="cert-card">
+        <div class="cert-ico" style="background:#fff9e6;">📺</div>
+        <div>
+          <div class="cert-name">freeCodeCamp — TF 2.0 Full Course</div>
+          <div class="cert-prov">YouTube / freeCodeCamp</div>
+          <span class="cert-free">Free</span>
+          <div class="cert-desc">7+ hour YouTube video. Signup வேண்டாம். Code along பண்ண perfect. Tamil students-கு best start!</div>
+          <a class="cert-link" href="https://www.youtube.com/watch?v=tPYj3fFJGjk" target="_blank">youtube.com → freeCodeCamp ↗</a>
+        </div>
+      </div>
+      <div class="cert-card">
+        <div class="cert-ico" style="background:#e6f4ff;">🎯</div>
+        <div>
+          <div class="cert-name">fast.ai Practical Deep Learning</div>
+          <div class="cert-prov">fast.ai</div>
+          <span class="cert-free">Free Course</span>
+          <div class="cert-desc">Top-down approach — project-first katthukkiduvaanga. Completely free. World-class quality.</div>
+          <a class="cert-link" href="https://course.fast.ai" target="_blank">course.fast.ai ↗</a>
+        </div>
+      </div>
+      <div class="cert-card">
+        <div class="cert-ico" style="background:#f0fff4;">🎓</div>
+        <div>
+          <div class="cert-name">Official TF Developer Certificate</div>
+          <div class="cert-prov">Google / TensorFlow.org</div>
+          <span class="cert-paid">Paid Exam (~$100)</span>
+          <div class="cert-desc">Study materials free. Exam மட்டும் pay. Most recognized by companies. Job-ku best certificate!</div>
+          <a class="cert-link" href="https://www.tensorflow.org/certificate" target="_blank">tensorflow.org/certificate ↗</a>
+        </div>
+      </div>
+      <div class="cert-card">
+        <div class="cert-ico" style="background:#fef3f2;">📱</div>
+        <div>
+          <div class="cert-name">Udacity — Intro to ML with TF</div>
+          <div class="cert-prov">Udacity</div>
+          <span class="cert-free">Free Course</span>
+          <div class="cert-desc">Project-based learning. Free access to all lessons. Regression, classification, deep learning covers.</div>
+          <a class="cert-link" href="https://www.udacity.com/course/intro-to-machine-learning-with-tensorflow-nanodegree--nd230" target="_blank">udacity.com ↗</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PROJECTS -->
+<section class="sec" id="projects">
+  <div class="sec-in">
+    <div class="sec-tag">Hands-on Projects</div>
+    <div class="sec-title">Build பண்ண வேண்டிய Projects</div>
+    <p class="sec-sub">இந்த projects build பண்ணா portfolio strong ஆகும். Companies impress ஆவாங்க!</p>
+    <div class="proj-g">
+
+      <div class="proj-card">
+        <div class="proj-hdr"><span class="proj-icon">🔢</span><div><span class="proj-title">MNIST Digit Classifier</span><span class="proj-ta">கையெழுத்து numbers கண்டுபிடி</span></div><span class="diff d-e">Easy</span></div>
+        <div class="proj-body">
+          <div class="proj-desc">Handwritten 0–9 digits classify பண்ற model. 99%+ accuracy achieve பண்ணலாம்.</div>
+          <div class="proj-ta-desc">🗣 First project-ஆ இதை build பண்ணு — confidence கிடைக்கும்!</div>
+          <div class="proj-skills"><span class="sk">Keras</span><span class="sk">CNN</span><span class="sk">Classification</span></div>
+        </div>
+      </div>
+
+      <div class="proj-card">
+        <div class="proj-hdr"><span class="proj-icon">😊</span><div><span class="proj-title">Tamil Movie Review Sentiment</span><span class="proj-ta">Review positive-ஆ negative-ஆ?</span></div><span class="diff d-e">Easy</span></div>
+        <div class="proj-body">
+          <div class="proj-desc">LSTM-ல movie reviews train பண்ணி positive/negative classify பண்று. Tamil datasets available!</div>
+          <div class="proj-ta-desc">🗣 இது India companies-க்கு relevant project!</div>
+          <div class="proj-skills"><span class="sk">LSTM</span><span class="sk">NLP</span><span class="sk">Embeddings</span></div>
+        </div>
+      </div>
+
+      <div class="proj-card">
+        <div class="proj-hdr"><span class="proj-icon">🌿</span><div><span class="proj-title">Crop Disease Detection App</span><span class="proj-ta">விவசாயிகளுக்கு உதவும் AI</span></div><span class="diff d-m">Medium</span></div>
+        <div class="proj-body">
+          <div class="proj-desc">Plant leaf photo upload பண்ணா disease கண்டுபிடிக்கும். EfficientNet transfer learning use பண்ணு.</div>
+          <div class="proj-ta-desc">🗣 Indian agriculture-க்கு super useful! Hackathon-ல win பண்ணலாம்.</div>
+          <div class="proj-skills"><span class="sk">Transfer Learning</span><span class="sk">EfficientNet</span><span class="sk">tf.data</span></div>
+        </div>
+      </div>
+
+      <div class="proj-card">
+        <div class="proj-hdr"><span class="proj-icon">📈</span><div><span class="proj-title">Stock Price Predictor</span><span class="proj-ta">நாளைய share price predict</span></div><span class="diff d-m">Medium</span></div>
+        <div class="proj-body">
+          <div class="proj-desc">LSTM-ல historical stock data train பண்ணி next day price forecast பண்ணு. Dashboard build பண்ணு.</div>
+          <div class="proj-ta-desc">🗣 Finance companies HR-கு impress பண்ண best project!</div>
+          <div class="proj-skills"><span class="sk">Time Series</span><span class="sk">LSTM</span><span class="sk">Forecasting</span></div>
+        </div>
+      </div>
+
+      <div class="proj-card">
+        <div class="proj-hdr"><span class="proj-icon">🎨</span><div><span class="proj-title">Neural Style Transfer</span><span class="proj-ta">Photo-ஐ painting-ஆ மாத்து</span></div><span class="diff d-m">Medium</span></div>
+        <div class="proj-body">
+          <div class="proj-desc">Van Gogh style-ல உன் photo-ஐ transform பண்ணு. TF.js-ல browser version build பண்ணு.</div>
+          <div class="proj-ta-desc">🗣 Social media-ல viral ஆகும் type project!</div>
+          <div class="proj-skills"><span class="sk">VGG19</span><span class="sk">Style Transfer</span><span class="sk">TF.js</span></div>
+        </div>
+      </div>
+
+      <div class="proj-card">
+        <div class="proj-hdr"><span class="proj-icon">🤖</span><div><span class="proj-title">Face Generation GAN</span><span class="proj-ta">இல்லாத face create பண்ணு</span></div><span class="diff d-h">Hard</span></div>
+        <div class="proj-body">
+          <div class="proj-desc">DCGAN build பண்ணி fake realistic human faces generate பண்ணு. Generator + Discriminator both build.</div>
+          <div class="proj-ta-desc">🗣 இது portfolio-ல இருந்தா instant attention கிடைக்கும்!</div>
+          <div class="proj-skills"><span class="sk">GAN</span><span class="sk">DCGAN</span><span class="sk">Custom Loop</span></div>
+        </div>
+      </div>
+
+      <div class="proj-card">
+        <div class="proj-hdr"><span class="proj-icon">🎮</span><div><span class="proj-title">Game Playing RL Agent<span class="new-badge" style="background:#ede9fe;color:#4c1d95;">NEW</span></span><span class="proj-ta">AI game தானா விளையாடும்!</span></div><span class="diff d-h">Hard</span></div>
+        <div class="proj-body">
+          <div class="proj-desc">TF-Agents-ல DQN build பண்ணி CartPole or Atari game play பண்ண AI train பண்ணு.</div>
+          <div class="proj-ta-desc">🗣 Robotics, gaming companies-கு perfect project!</div>
+          <div class="proj-skills"><span class="sk">RL</span><span class="sk">TF-Agents</span><span class="sk">DQN</span></div>
+        </div>
+      </div>
+
+      <div class="proj-card">
+        <div class="proj-hdr"><span class="proj-icon">🛒</span><div><span class="proj-title">Product Recommendation Engine<span class="new-badge" style="background:#ede9fe;color:#4c1d95;">NEW</span></span><span class="proj-ta">Amazon மாதிரி recommend பண்ணு</span></div><span class="diff d-h">Hard</span></div>
+        <div class="proj-body">
+          <div class="proj-desc">TF Recommenders-ல collaborative filtering build பண்ணி user-specific product suggestions give பண்ணு.</div>
+          <div class="proj-ta-desc">🗣 E-commerce, Flipkart type companies-கு best!</div>
+          <div class="proj-skills"><span class="sk">TF Recommenders</span><span class="sk">Collaborative Filtering</span><span class="sk">Ranking</span></div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- TOOLS -->
+<section class="sec sec-alt">
+  <div class="sec-in">
+    <div class="sec-tag">Ecosystem</div>
+    <div class="sec-title">TensorFlow Ecosystem — எல்லாத்தையும் தெரிஞ்சுக்கோ</div>
+    <p class="sec-sub">TF ஒரே library இல்ல — பெரிய ecosystem. இதுல எல்லாம் தெரிஞ்சுக்க வேண்டியது இல்ல, need-ஆனப்போ கத்துக்கலாம்.</p>
+    <div class="tools-g">
+      <div class="tool-c"><div class="tool-n">TensorFlow Core</div><div class="tool-t">Foundation</div><div class="tool-d">Tensors, ops, computation. எல்லாத்தோடும் base இது.</div></div>
+      <div class="tool-c"><div class="tool-n">Keras (tf.keras)</div><div class="tool-t">High-Level API</div><div class="tool-d">Easy-ஆ network build பண்ண. Day 1 இதே use பண்ணு.</div></div>
+      <div class="tool-c"><div class="tool-n">TensorBoard</div><div class="tool-t">Visualization</div><div class="tool-d">Training progress graph-ல பாக்க. Bugs கண்டுபிடிக்க.</div></div>
+      <div class="tool-c"><div class="tool-n">TF Hub</div><div class="tool-t">Pre-trained Models</div><div class="tool-d">Google-ஓட ready models — BERT, MobileNet free!</div></div>
+      <div class="tool-c"><div class="tool-n">TF Lite</div><div class="tool-t">Mobile / Edge</div><div class="tool-d">Android/iOS-ல offline ML run பண்ண.</div></div>
+      <div class="tool-c"><div class="tool-n">TensorFlow.js</div><div class="tool-t">Browser / Node.js</div><div class="tool-d">Website-ல directly AI run பண்ணலாம்.</div></div>
+      <div class="tool-c"><div class="tool-n">TFX (TF Extended)</div><div class="tool-t">MLOps</div><div class="tool-d">Production pipelines — auto retrain, validate, deploy.</div></div>
+      <div class="tool-c"><div class="tool-n">TF-Agents</div><div class="tool-t">Reinforcement Learning</div><div class="tool-d">RL agents build பண்ண — games, robotics.</div></div>
+      <div class="tool-c"><div class="tool-n">TF Recommenders</div><div class="tool-t">Recommendation</div><div class="tool-d">Netflix/Amazon type suggest systems build பண்ண.</div></div>
+      <div class="tool-c"><div class="tool-n">TF Privacy</div><div class="tool-t">Privacy ML</div><div class="tool-d">Sensitive data-ஐ safely train பண்ண.</div></div>
+      <div class="tool-c"><div class="tool-n">Keras Tuner</div><div class="tool-t">AutoML</div><div class="tool-d">Best hyperparameters automatically find பண்ண.</div></div>
+      <div class="tool-c"><div class="tool-n">TF Datasets (TFDS)</div><div class="tool-t">Data Library</div><div class="tool-d">100+ free datasets — ImageNet, COCO, GLUE உள்ளே.</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- STUDY TIMELINE -->
+<section class="sec sec-dark" id="study">
+  <div class="sec-in">
+    <div class="sec-tag">Study Plan</div>
+    <div class="sec-title">7-Month Study Schedule</div>
+    <p class="sec-sub">Day-ku 1–2 hours, week-ku 5 days practice பண்ணா 7 months-ல pro level reach பண்ணலாம்.</p>
+    <div class="tl">
+      <div class="tl-item"><div class="tl-dot"></div>
+        <div class="tl-w">Month 1</div>
+        <div class="tl-t">Python & Math Foundation</div>
+        <div class="tl-d">NumPy, Pandas, Linear Algebra, Calculus basics. TF install, first tensor, first neural network on MNIST. 🗣 இது boring-ஆ தெரியும் — but இல்லாம TF work ஆகாது!</div>
+      </div>
+      <div class="tl-item"><div class="tl-dot"></div>
+        <div class="tl-w">Month 2</div>
+        <div class="tl-t">TF Core + Computer Vision</div>
+        <div class="tl-d">Keras mastery, CNNs from scratch, tf.data pipeline, batch norm. Project: Image classifier. 🗣 இந்த month-ல results கண்ணாலே பாப்பே — exciting!</div>
+      </div>
+      <div class="tl-item"><div class="tl-dot"></div>
+        <div class="tl-w">Month 3</div>
+        <div class="tl-t">Transfer Learning + NLP Intro</div>
+        <div class="tl-d">EfficientNet fine-tuning, LSTM text classifier, tokenization. Project: Crop disease detection + sentiment analysis. 🗣 இப்போ real apps build பண்றோம்!</div>
+      </div>
+      <div class="tl-item"><div class="tl-dot"></div>
+        <div class="tl-w">Month 4</div>
+        <div class="tl-t">Advanced NLP + Transformers</div>
+        <div class="tl-d">BERT fine-tuning, attention, HuggingFace, time series. Project: QA system, stock predictor. 🗣 ChatGPT மாதிரி apps build பண்ண start ஆகுது!</div>
+      </div>
+      <div class="tl-item"><div class="tl-dot"></div>
+        <div class="tl-w">Month 5</div>
+        <div class="tl-t">Advanced TF + Generative AI</div>
+        <div class="tl-d">Custom loops, GANs, VAEs, Keras Tuner, mixed precision. Project: Face generation GAN. 🗣 இப்போ நீ intermediate-ல இல்ல, advanced!</div>
+      </div>
+      <div class="tl-item"><div class="tl-dot"></div>
+        <div class="tl-w">Month 6</div>
+        <div class="tl-t">Production Deployment</div>
+        <div class="tl-d">TF Serving, TFLite, FastAPI, Docker, Cloud deploy. Project: Full ML microservice. 🗣 இது தெரிஞ்சா immediately hire ஆவாய்!</div>
+      </div>
+      <div class="tl-item"><div class="tl-dot" style="background:#a78bfa;box-shadow:0 0 0 2px #8b5cf6;"></div>
+        <div class="tl-w">Month 7 — EXPERT</div>
+        <div class="tl-t">RL, Recommenders, Distributed & Responsible AI</div>
+        <div class="tl-d">TF-Agents RL, Recommenders, Multi-GPU training, TF Privacy, Responsible AI. Portfolio complete! 🗣 இப்போ நீ Top 5% TF Developer — job interviews ace பண்ணு!</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CHEATSHEET -->
+<section class="sec" id="cheat">
+  <div class="sec-in">
+    <div class="sec-tag">Quick Reference</div>
+    <div class="sec-title">TF Cheatsheet — அடிக்கடி Use ஆகும் Code</div>
+    <p class="sec-sub">இதை bookmark பண்ணு. Interview-லயும் useful!</p>
+    <div class="cheat-g">
+      <div class="cheat-blk">
+        <div class="cheat-hdr">Tensors — அடிப்படை</div>
+        <div class="cheat-code"><span class="cm"># Tamil: Tensor = TF-ஓட data unit</span>
+tf.<span class="fn">constant</span>([<span class="num">1</span>,<span class="num">2</span>,<span class="num">3</span>])       <span class="cm"># unchangeable</span>
+tf.<span class="fn">Variable</span>([<span class="num">1</span>,<span class="num">2</span>,<span class="num">3</span>])       <span class="cm"># changeable (weights)</span>
+tf.<span class="fn">zeros</span>((<span class="num">3</span>,<span class="num">3</span>))            <span class="cm"># all zeros</span>
+tf.<span class="fn">random.normal</span>((<span class="num">100</span>,<span class="num">10</span>)) <span class="cm"># random values</span>
+tf.<span class="fn">reshape</span>(t, (<span class="num">-1</span>,<span class="num">28</span>,<span class="num">28</span>))  <span class="cm"># shape மாத்து</span>
+tf.<span class="fn">cast</span>(t, tf.float32)     <span class="cm"># dtype மாத்து</span></div>
+      </div>
+      <div class="cheat-blk">
+        <div class="cheat-hdr">Model Build & Train</div>
+        <div class="cheat-code">model = tf.keras.<span class="fn">Sequential</span>([
+  layers.<span class="fn">Dense</span>(<span class="num">64</span>, activation=<span class="str">'relu'</span>),
+  layers.<span class="fn">Dropout</span>(<span class="num">0.3</span>),
+  layers.<span class="fn">Dense</span>(<span class="num">10</span>, activation=<span class="str">'softmax'</span>)
+])
+model.<span class="fn">compile</span>(
+  optimizer=<span class="str">'adam'</span>,
+  loss=<span class="str">'sparse_categorical_crossentropy'</span>,
+  metrics=[<span class="str">'accuracy'</span>]
+)
+model.<span class="fn">fit</span>(X, y, epochs=<span class="num">20</span>, validation_split=<span class="num">.2</span>)</div>
+      </div>
+      <div class="cheat-blk">
+        <div class="cheat-hdr">CNN — Image Classification</div>
+        <div class="cheat-code">tf.keras.<span class="fn">Sequential</span>([
+  layers.<span class="fn">Conv2D</span>(<span class="num">32</span>,(<span class="num">3</span>,<span class="num">3</span>),activation=<span class="str">'relu'</span>,
+    input_shape=(<span class="num">224</span>,<span class="num">224</span>,<span class="num">3</span>)),
+  layers.<span class="fn">MaxPooling2D</span>(<span class="num">2</span>,<span class="num">2</span>),
+  layers.<span class="fn">Conv2D</span>(<span class="num">64</span>,(<span class="num">3</span>,<span class="num">3</span>),activation=<span class="str">'relu'</span>),
+  layers.<span class="fn">GlobalAveragePooling2D</span>(),
+  layers.<span class="fn">Dense</span>(<span class="num">10</span>, activation=<span class="str">'softmax'</span>)
+])</div>
+      </div>
+      <div class="cheat-blk">
+        <div class="cheat-hdr">Transfer Learning — Fast!</div>
+        <div class="cheat-code"><span class="cm"># Google-ஓட model use பண்ணு</span>
+base = tf.keras.applications.<span class="fn">EfficientNetB0</span>(
+  include_top=<span class="kw">False</span>, weights=<span class="str">'imagenet'</span>)
+base.trainable = <span class="kw">False</span>  <span class="cm"># freeze</span>
+
+x = layers.<span class="fn">GlobalAveragePooling2D</span>()(base.output)
+x = layers.<span class="fn">Dense</span>(<span class="num">256</span>, activation=<span class="str">'relu'</span>)(x)
+out = layers.<span class="fn">Dense</span>(<span class="num">5</span>, activation=<span class="str">'softmax'</span>)(x)
+model = tf.keras.<span class="fn">Model</span>(base.input, out)</div>
+      </div>
+      <div class="cheat-blk">
+        <div class="cheat-hdr">Callbacks — Training Controls</div>
+        <div class="cheat-code">callbacks = [
+  tf.keras.callbacks.<span class="fn">EarlyStopping</span>(
+    patience=<span class="num">5</span>, restore_best_weights=<span class="kw">True</span>),
+  tf.keras.callbacks.<span class="fn">ReduceLROnPlateau</span>(
+    factor=<span class="num">0.5</span>, patience=<span class="num">3</span>),
+  tf.keras.callbacks.<span class="fn">ModelCheckpoint</span>(
+    <span class="str">'best.h5'</span>, save_best_only=<span class="kw">True</span>),
+  tf.keras.callbacks.<span class="fn">TensorBoard</span>(<span class="str">'./logs'</span>)
+]
+<span class="cm"># tensorboard --logdir ./logs</span></div>
+      </div>
+      <div class="cheat-blk">
+        <div class="cheat-hdr">Save, Load & Convert</div>
+        <div class="cheat-code"><span class="cm"># Save</span>
+model.<span class="fn">save</span>(<span class="str">'my_model'</span>)         <span class="cm"># SavedModel</span>
+model.<span class="fn">save</span>(<span class="str">'model.h5'</span>)         <span class="cm"># H5 format</span>
+
+<span class="cm"># Load</span>
+tf.keras.models.<span class="fn">load_model</span>(<span class="str">'my_model'</span>)
+
+<span class="cm"># TFLite — phone-ku</span>
+converter = tf.lite.TFLiteConverter\
+  .<span class="fn">from_saved_model</span>(<span class="str">'my_model'</span>)
+converter.optimizations = [tf.lite.Optimize.DEFAULT]
+tflite = converter.<span class="fn">convert</span>()</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CAREER -->
+<section class="sec sec-alt">
+  <div class="sec-in">
+    <div class="sec-tag">Career Guide</div>
+    <div class="sec-title">TF தெரிஞ்சா எங்கே போகலாம்?</div>
+    <p class="sec-sub">India-ல TensorFlow jobs growing fast. இந்த career paths explore பண்ணு.</p>
+    <div class="career-g">
+      <div class="career-c">
+        <div class="career-ico">🧑‍💻</div>
+        <div class="career-t">ML Engineer</div>
+        <div class="career-ta">Production ML systems build பண்றவங்க</div>
+        <div class="career-desc">Models design பண்ணி deploy பண்ணி maintain பண்றது. Google, Flipkart, Swiggy போன்ற companies-ல jobs.</div>
+        <div class="career-sal">🇮🇳 ₹8–30 LPA &nbsp;|&nbsp; 🇺🇸 $130K–200K</div>
+      </div>
+      <div class="career-c">
+        <div class="career-ico">🔬</div>
+        <div class="career-t">Data Scientist</div>
+        <div class="career-ta">Data-ல patterns கண்டுபிடிக்கிறவங்க</div>
+        <div class="career-desc">TF + SQL + Pandas — predict பண்ணி business decisions help பண்றது. Every industry needs this!</div>
+        <div class="career-sal">🇮🇳 ₹6–20 LPA &nbsp;|&nbsp; 🇺🇸 $95K–160K</div>
+      </div>
+      <div class="career-c">
+        <div class="career-ico">📱</div>
+        <div class="career-t">ML Mobile Dev</div>
+        <div class="career-ta">Phone-ல AI features build பண்றவங்க</div>
+        <div class="career-desc">TFLite + Android/iOS. Camera AI, voice AI, health AI. Ola, Rapido, PhonePe type companies.</div>
+        <div class="career-sal">🇮🇳 ₹10–25 LPA &nbsp;|&nbsp; 🇺🇸 $120K–170K</div>
+      </div>
+      <div class="career-c">
+        <div class="career-ico">🌐</div>
+        <div class="career-t">AI Product Developer</div>
+        <div class="career-ta">Full-stack + ML combine பண்றவங்க</div>
+        <div class="career-desc">Frontend + Backend + TF model deploy. Startup-ல single-handedly AI product build பண்ணலாம்.</div>
+        <div class="career-sal">🇮🇳 ₹12–35 LPA &nbsp;|&nbsp; 🇺🇸 $140K–200K</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <p><strong>TensorFlow Masterclass — Tanglish Edition</strong></p>
+  <p style="margin-top:8px;">தினமும் 1–2 hours practice பண்ணு. 7 months-ல நீ Pro Developer ஆவே! 💪</p>
+  <p style="margin-top:.5rem;opacity:.5;font-size:.75rem;">TensorFlow is open-source by Google. This guide is educational and not affiliated with Google or TensorFlow.org.</p>
+</footer>
+
+<script>
+function toggleMenu(){
+  var m=document.getElementById('mobileMenu');
+  var b=document.getElementById('hamBtn');
+  m.classList.toggle('open');
+  b.classList.toggle('open');
+}
+function closeMenu(){
+  document.getElementById('mobileMenu').classList.remove('open');
+  document.getElementById('hamBtn').classList.remove('open');
+}
+</script>
+</body>
+</html>
